@@ -1,24 +1,24 @@
-Litecoin Core integration/staging tree
-=====================================
+DIGI integration/staging tree
+================================
 
-https://litecoin.org
 
-What is Litecoin?
+Copyright (c) 2009-2015 Bitcoin Developers
+Copyright (c) 2011-2015 DIGI Developers
+
+What is DIGI?
 ----------------
 
-Litecoin is an experimental new digital currency that enables instant payments to
-anyone, anywhere in the world. Litecoin uses peer-to-peer technology to operate
-with no central authority: managing transactions and issuing money are carried
-out collectively by the network. Litecoin Core is the name of open source
-software which enables the use of this currency.
-
-For more information, as well as an immediately useable, binary version of
-the Litecoin Core software, see https://litecoin.org
+DIGI is a clone of Litecoin - a lite version of Bitcoin using scrypt as a proof-of-work algorithm.
+- 60 second block targets
+- ~210 million total coins
+- 138 million premined coins for crowdtrading platform www.capitaldigi.com
+- 15 coins per block
+- 10 blocks to retarget difficulty
 
 License
 -------
 
-Litecoin Core is released under the terms of the MIT license. See [COPYING](COPYING) for more
+DIGI is released under the terms of the MIT license. See `COPYING` for more
 information or see http://opensource.org/licenses/MIT.
 
 Development process
@@ -27,7 +27,7 @@ Development process
 Developers work in their own trees, then submit pull requests when they think
 their feature or bug fix is ready.
 
-If it is a simple/trivial/non-controversial change, then one of the Litecoin
+If it is a simple/trivial/non-controversial change, then one of the DIGI
 development team members simply pulls it.
 
 If it is a *more complicated or potentially controversial* change, then the patch
@@ -39,9 +39,9 @@ Developers should expect to rework and resubmit patches if the code doesn't
 match the project's coding conventions (see [doc/coding.md](doc/coding.md)) or are
 controversial.
 
-The `master-0.10` branch is regularly built and tested, but is not guaranteed to be
-completely stable. [Tags](https://github.com/litecoin-project/litecoin/tags) are created
-regularly to indicate new official, stable release versions of Litecoin.
+The `master` branch is regularly built and tested, but is not guaranteed to be
+completely stable. [Tags](https://github.com/DIGI-project/DIGI/tags) are created
+regularly to indicate new official, stable release versions of DIGI.
 
 Testing
 -------
@@ -51,54 +51,18 @@ requests than we can review and test on short notice. Please be patient and help
 other people's pull requests, and remember this is a security-critical project where any mistake might cost people
 lots of money.
 
-### Manual Quality Assurance (QA) Testing
+### Automated Testing
 
-Large changes should have a test plan, and should be tested by somebody other
-than the developer who wrote the code.
-Creating a thread in the [Litecoin discussion forum](https://litecointalk.org/index.php?board=2.0) will allow the Litecoin
-development team members to review your proposal and to provide assistance with creating a test plan. 
+Developers are strongly encouraged to write unit tests for new code, and to
+submit new unit tests for old code.
 
+Unit tests for the core code are in `src/test/`. To compile and run them:
 
-Translations
-------------
+    cd src; make -f makefile.unix test
 
-**Important**: We do not accept translation changes as GitHub pull requests because the next
-pull from Transifex would automatically overwrite them again.
+Unit tests for the GUI code are in `src/qt/test/`. To compile and run them:
 
-We only accept translation fixes that are submitted through [Bitcoin Core's Transifex page](https://www.transifex.com/projects/p/bitcoin/).
-Translations are converted to Litecoin periodically.
+    qmake BITCOIN_QT_TEST=1 -o Makefile.test bitcoin-qt.pro
+    make -f Makefile.test
+    ./DIGI-qt_test
 
-Development tips and tricks
----------------------------
-
-**compiling for debugging**
-
-Run configure with the --enable-debug option, then make. Or run configure with
-CXXFLAGS="-g -ggdb -O0" or whatever debug flags you need.
-
-**debug.log**
-
-If the code is behaving strangely, take a look in the debug.log file in the data directory;
-error and debugging messages are written there.
-
-The -debug=... command-line option controls debugging; running with just -debug will turn
-on all categories (and give you a very large debug.log file).
-
-The Qt code routes qDebug() output to debug.log under category "qt": run with -debug=qt
-to see it.
-
-**testnet and regtest modes**
-
-Run with the -testnet option to run with "play litecoins" on the test network, if you
-are testing multi-machine code that needs to operate across the internet.
-
-If you are testing something that can run on one machine, run with the -regtest option.
-In regression test mode, blocks can be created on-demand; see qa/rpc-tests/ for tests
-that run in -regtest mode.
-
-**DEBUG_LOCKORDER**
-
-Litecoin Core is a multithreaded application, and deadlocks or other multithreading bugs
-can be very difficult to track down. Compiling with -DDEBUG_LOCKORDER (configure
-CXXFLAGS="-DDEBUG_LOCKORDER -g") inserts run-time checks to keep track of which locks
-are held, and adds warnings to the debug.log file if inconsistencies are detected.
