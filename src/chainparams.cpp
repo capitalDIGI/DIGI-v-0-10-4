@@ -152,6 +152,7 @@ public:
         //assert(hashGenesisBlock == uint256("0x12a765e31ffd4059bada1e25190f6e98c99d9714d334efa41a195a7e7e04bfe2"));
         assert(genesis.hashMerkleRoot == uint256("0x9863d171782afd647c24e2bb4751d18f88883073ebb5ab6451983e3ba5dd6628"));
 
+        vSeeds.push_back(CDNSSeedData("DIGItools.com", "37.187.110.91"));
         vSeeds.push_back(CDNSSeedData("DIGItools.com", "54.69.29.182"));
 
         base58Prefixes[PUBKEY_ADDRESS] = list_of(30);
