@@ -140,7 +140,6 @@ Value getdifficulty(const Array& params, bool fHelp)
     return GetDifficulty();
 }
 
-
 Value getrawmempool(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() > 1)

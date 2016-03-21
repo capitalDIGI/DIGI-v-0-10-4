@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Debug window</string>
+   <string>DIGI - Debug window</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -36,7 +36,7 @@
           </font>
          </property>
          <property name="text">
-          <string>General</string>
+          <string>DIGI Core</string>
          </property>
         </widget>
        </item>
@@ -331,7 +331,7 @@
        <item row="15" column="0">
         <widget class="QPushButton" name="openDebugLogfileButton">
          <property name="toolTip">
-          <string>Open the Litecoin debug log file from the current data directory. This can take a few seconds for large log files.</string>
+          <string>Open the DIGI debug log file from the current data directory. This can take a few seconds for large log files.</string>
          </property>
          <property name="text">
           <string>&amp;Open</string>
@@ -342,6 +342,35 @@
         </widget>
        </item>
        <item row="16" column="0">
+<!--<<<<<<< HEAD
+=======
+        <widget class="QLabel" name="labelCLOptions">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Command-line options</string>
+         </property>
+        </widget>
+       </item>
+       <item row="17" column="0">
+        <widget class="QPushButton" name="showCLOptionsButton">
+         <property name="toolTip">
+          <string>Show the DIGI-Qt help message to get a list with possible DIGI command-line options.</string>
+         </property>
+         <property name="text">
+          <string>&amp;Show</string>
+         </property>
+         <property name="autoDefault">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="18" column="0">
+>>>>>>> e30de9e... a-->
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>

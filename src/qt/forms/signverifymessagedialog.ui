@@ -48,7 +48,8 @@
          <item>
           <widget class="QValidatedLineEdit" name="addressIn_SM">
            <property name="toolTip">
-            <string>The Litecoin address to sign the message with</string>
+<!--<<<<<<< HEAD-->
+            <string>The address to sign the message with (e.g. DS7BLaqEwe83XZqrLdDBizcQTnyvV63U5W)</string>
            </property>
           </widget>
          </item>
@@ -152,7 +153,7 @@
          <item>
           <widget class="QPushButton" name="signMessageButton_SM">
            <property name="toolTip">
-            <string>Sign the message to prove you own this Litecoin address</string>
+            <string>Sign the message to prove you own this DIGI address</string>
            </property>
            <property name="text">
             <string>Sign &amp;Message</string>
@@ -258,7 +259,7 @@
          <item>
           <widget class="QValidatedLineEdit" name="addressIn_VM">
            <property name="toolTip">
-            <string>The Litecoin address the message was signed with</string>
+            <string>The address the message was signed with (e.g. DS7BLaqEwe83XZqrLdDBizcQTnyvV63U5W)</string>
            </property>
           </widget>
          </item>
@@ -295,7 +296,7 @@
          <item>
           <widget class="QPushButton" name="verifyMessageButton_VM">
            <property name="toolTip">
-            <string>Verify the message to ensure it was signed with the specified Litecoin address</string>
+            <string>Verify the message to ensure it was signed with the specified DIGI address</string>
            </property>
            <property name="text">
             <string>Verify &amp;Message</string>

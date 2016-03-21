@@ -160,7 +160,7 @@ void Intro::pickDataDirectory()
     /* 1) Default data directory for operating system */
     QString dataDir = getDefaultDataDirectory();
     /* 2) Allow QSettings to override default dir */
-    dataDir = settings.value("strDataDir", dataDir).toString();
+    dataDir = settings.value("DIGIstrDataDir", dataDir).toString();
 
     if(!fs::exists(GUIUtil::qstringToBoostPath(dataDir)) || GetBoolArg("-choosedatadir", false))
     {
@@ -181,13 +181,13 @@ void Intro::pickDataDirectory()
                 TryCreateDirectory(GUIUtil::qstringToBoostPath(dataDir));
                 break;
             } catch(fs::filesystem_error &e) {
-                QMessageBox::critical(0, tr("Litecoin Core"),
+                QMessageBox::critical(0, tr("DIGI"),
                     tr("Error: Specified data directory \"%1\" cannot be created.").arg(dataDir));
                 /* fall through, back to choosing screen */
             }
         }
 
-        settings.setValue("strDataDir", dataDir);
+        settings.setValue("DIGIstrDataDir", dataDir);
     }
     /* Only override -datadir if different from the default, to make it possible to
      * override -datadir in the bitcoin.conf file in the default data directory

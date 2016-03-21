@@ -1,0 +1,6 @@
+#!/bin/bash
+sed -i 's/Litecoin Core/DIGI/g' $1
+sed -i 's/litecoin core/DIGI/g' $1
+sed -i 's/Litecoin/DIGI/g' $1
+sed -i 's/litecoin/DIGI/g' $1
+sed -i 's/LITECOINS/DIGIS/g' $1
