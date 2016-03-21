@@ -123,8 +123,8 @@ void setupAmountWidget(QLineEdit *widget, QWidget *parent)
 
 bool parseBitcoinURI(const QUrl &uri, SendCoinsRecipient *out)
 {
-    // return if URI is not valid or is no bitcoin: URI
-    if(!uri.isValid() || uri.scheme() != QString("litecoin"))
+    // return if URI is not valid or is no bitcoin URI
+    if(!uri.isValid() || uri.scheme() != QString("DIGI"))
         return false;
 
     SendCoinsRecipient rv;
@@ -188,9 +188,9 @@ bool parseBitcoinURI(QString uri, SendCoinsRecipient *out)
     //
     //    Cannot handle this later, because bitcoin:// will cause Qt to see the part after // as host,
     //    which will lower-case it (and thus invalidate the address).
-    if(uri.startsWith("litecoin://", Qt::CaseInsensitive))
+    if(uri.startsWith("DIGI://"))
     {
-        uri.replace(0, 11, "litecoin:");
+        uri.replace(0, 11, "DIGI:");
     }
     QUrl uriInstance(uri);
     return parseBitcoinURI(uriInstance, out);
@@ -198,7 +198,8 @@ bool parseBitcoinURI(QString uri, SendCoinsRecipient *out)
 
 QString formatBitcoinURI(const SendCoinsRecipient &info)
 {
-    QString ret = QString("litecoin:%1").arg(info.address);
+//    QString ret = QString("litecoin:%1").arg(info.address);
+    QString ret = QString("DIGI:%1").arg(info.address);
     int paramCount = 0;
 
     if (info.amount)
@@ -567,7 +568,7 @@ TableViewLastColumnResizingFixer::TableViewLastColumnResizingFixer(QTableView* t
 #ifdef WIN32
 boost::filesystem::path static StartupShortcutPath()
 {
-    return GetSpecialFolderPath(CSIDL_STARTUP) / "Litecoin.lnk";
+    return GetSpecialFolderPath(CSIDL_STARTUP) / "DIGI.lnk";
 }
 
 bool GetStartOnSystemStartup()
@@ -649,7 +650,7 @@ boost::filesystem::path static GetAutostartDir()
 
 boost::filesystem::path static GetAutostartFilePath()
 {
-    return GetAutostartDir() / "litecoin.desktop";
+    return GetAutostartDir() / "DIGI.desktop";
 }
 
 bool GetStartOnSystemStartup()
@@ -690,7 +691,7 @@ bool SetStartOnSystemStartup(bool fAutoStart)
         // Write a bitcoin.desktop file to the autostart directory:
         optionFile << "[Desktop Entry]\n";
         optionFile << "Type=Application\n";
-        optionFile << "Name=Litecoin\n";
+        optionFile << "Name=DIGI\n";
         optionFile << "Exec=" << pszExePath << " -min\n";
         optionFile << "Terminal=false\n";
         optionFile << "Hidden=false\n";
@@ -761,10 +762,17 @@ bool SetStartOnSystemStartup(bool fAutoStart) { return false; }
 
 void saveWindowGeometry(const QString& strSetting, QWidget *parent)
 {
+//<<<<<<< HEAD
     QSettings settings;
     settings.setValue(strSetting + "Pos", parent->pos());
     settings.setValue(strSetting + "Size", parent->size());
 }
+//=======
+//    header = tr("DIGI-Qt") + " " + tr("version") + " " +
+//        QString::fromStdString(FormatFullVersion()) + "\n\n" +
+//        tr("Usage:") + "\n" +
+//        "  DIGI-qt [" + tr("command-line options") + "]                     " + "\n";
+//>>>>>>> e30de9e... a
 
 void restoreWindowGeometry(const QString& strSetting, const QSize& defaultSize, QWidget *parent)
 {

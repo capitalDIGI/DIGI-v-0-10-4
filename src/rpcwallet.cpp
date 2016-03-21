@@ -80,13 +80,13 @@ Value getnewaddress(const Array& params, bool fHelp)
     if (fHelp || params.size() > 1)
         throw runtime_error(
             "getnewaddress ( \"account\" )\n"
-            "\nReturns a new Litecoin address for receiving payments.\n"
+            "\nReturns a new DIGI address for receiving payments.\n"
             "If 'account' is specified (recommended), it is added to the address book \n"
             "so payments received with the address will be credited to 'account'.\n"
             "\nArguments:\n"
             "1. \"account\"        (string, optional) The account name for the address to be linked to. if not provided, the default account \"\" is used. It can also be set to the empty string \"\" to represent the default account. The account does not need to exist, it will be created if there is no account by the given name.\n"
             "\nResult:\n"
-            "\"litecoinaddress\"    (string) The new litecoin address\n"
+            "\"litecoinaddress\"    (string) The newDIGI address\n"
             "\nExamples:\n"
             + HelpExampleCli("getnewaddress", "")
             + HelpExampleCli("getnewaddress", "\"\"")
@@ -156,7 +156,7 @@ Value getaccountaddress(const Array& params, bool fHelp)
     if (fHelp || params.size() != 1)
         throw runtime_error(
             "getaccountaddress \"account\"\n"
-            "\nReturns the current Litecoin address for receiving payments to this account.\n"
+            "\nReturns the current DIGI address for receiving payments to this account.\n"
             "\nArguments:\n"
             "1. \"account\"       (string, required) The account name for the address. It can also be set to the empty string \"\" to represent the default account. The account does not need to exist, it will be created and a new address created  if there is no account by the given name.\n"
             "\nResult:\n"
@@ -213,19 +213,20 @@ Value setaccount(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() < 1 || params.size() > 2)
         throw runtime_error(
-            "setaccount \"litecoinaddress\" \"account\"\n"
+            "setaccount \"DIGIaddress\" \"account\"\n"
             "\nSets the account associated with the given address.\n"
             "\nArguments:\n"
             "1. \"litecoinaddress\"  (string, required) The litecoin address to be associated with an account.\n"
             "2. \"account\"         (string, required) The account to assign the address to.\n"
-            "\nExamples:\n"
-            + HelpExampleCli("setaccount", "\"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\" \"tabby\"")
-            + HelpExampleRpc("setaccount", "\"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\", \"tabby\"")
+//            "\nExamples:\n"
+//            + HelpExampleCli("setaccount", "\"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\" \"tabby\"")
+//            + HelpExampleRpc("setaccount", "\"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\", \"tabby\"")
         );
+
 
     CBitcoinAddress address(params[0].get_str());
     if (!address.IsValid())
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Litecoin address");
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid DIGI address");
 
 
     string strAccount;
@@ -255,20 +256,20 @@ Value getaccount(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 1)
         throw runtime_error(
-            "getaccount \"litecoinaddress\"\n"
+            "getaccount \"DIGIaddress\"\n"
             "\nReturns the account associated with the given address.\n"
             "\nArguments:\n"
             "1. \"litecoinaddress\"  (string, required) The litecoin address for account lookup.\n"
             "\nResult:\n"
             "\"accountname\"        (string) the account address\n"
-            "\nExamples:\n"
-            + HelpExampleCli("getaccount", "\"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\"")
-            + HelpExampleRpc("getaccount", "\"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\"")
+//            "\nExamples:\n"
+//            + HelpExampleCli("getaccount", "\"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\"")
+//            + HelpExampleRpc("getaccount", "\"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\"")
         );
 
     CBitcoinAddress address(params[0].get_str());
     if (!address.IsValid())
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Litecoin address");
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid DIGI address");
 
     string strAccount;
     map<CTxDestination, CAddressBookData>::iterator mi = pwalletMain->mapAddressBook.find(address.Get());
@@ -348,7 +349,7 @@ Value sendtoaddress(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() < 2 || params.size() > 4)
         throw runtime_error(
-            "sendtoaddress \"litecoinaddress\" amount ( \"comment\" \"comment-to\" )\n"
+            "sendtoaddress \"DIGIaddress\" amount ( \"comment\" \"comment-to\" )\n"
             "\nSend an amount to a given address. The amount is a real and is rounded to the nearest 0.00000001\n"
             + HelpRequiringPassphrase() +
             "\nArguments:\n"
@@ -361,15 +362,15 @@ Value sendtoaddress(const Array& params, bool fHelp)
             "                             transaction, just kept in your wallet.\n"
             "\nResult:\n"
             "\"transactionid\"  (string) The transaction id.\n"
-            "\nExamples:\n"
-            + HelpExampleCli("sendtoaddress", "\"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\" 0.1")
-            + HelpExampleCli("sendtoaddress", "\"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\" 0.1 \"donation\" \"seans outpost\"")
-            + HelpExampleRpc("sendtoaddress", "\"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\", 0.1, \"donation\", \"seans outpost\"")
+//            "\nExamples:\n"
+//            + HelpExampleCli("sendtoaddress", "\"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\" 0.1")
+//            + HelpExampleCli("sendtoaddress", "\"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\" 0.1 \"donation\" \"seans outpost\"")
+//            + HelpExampleRpc("sendtoaddress", "\"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\", 0.1, \"donation\", \"seans outpost\"")
         );
 
     CBitcoinAddress address(params[0].get_str());
     if (!address.IsValid())
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Litecoin address");
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid DIGI address");
 
     // Amount
     CAmount nAmount = AmountFromValue(params[1]);
@@ -439,7 +440,7 @@ Value signmessage(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 2)
         throw runtime_error(
-            "signmessage \"litecoinaddress\" \"message\"\n"
+            "signmessage \"DIGIaddress\" \"message\"\n"
             "\nSign a message with the private key of an address"
             + HelpRequiringPassphrase() + "\n"
             "\nArguments:\n"
@@ -447,15 +448,15 @@ Value signmessage(const Array& params, bool fHelp)
             "2. \"message\"         (string, required) The message to create a signature of.\n"
             "\nResult:\n"
             "\"signature\"          (string) The signature of the message encoded in base 64\n"
-            "\nExamples:\n"
-            "\nUnlock the wallet for 30 seconds\n"
-            + HelpExampleCli("walletpassphrase", "\"mypassphrase\" 30") +
-            "\nCreate the signature\n"
-            + HelpExampleCli("signmessage", "\"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\" \"my message\"") +
-            "\nVerify the signature\n"
-            + HelpExampleCli("verifymessage", "\"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\" \"signature\" \"my message\"") +
-            "\nAs json rpc\n"
-            + HelpExampleRpc("signmessage", "\"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\", \"my message\"")
+//            "\nExamples:\n"
+//            "\nUnlock the wallet for 30 seconds\n"
+//            + HelpExampleCli("walletpassphrase", "\"mypassphrase\" 30") +
+//            "\nCreate the signature\n"
+//            + HelpExampleCli("signmessage", "\"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\" \"my message\"") +
+//            "\nVerify the signature\n"
+//            + HelpExampleCli("verifymessage", "\"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\" \"signature\" \"my message\"") +
+//            "\nAs json rpc\n"
+//            + HelpExampleRpc("signmessage", "\"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\", \"my message\"")
         );
 
     EnsureWalletIsUnlocked();
@@ -490,28 +491,28 @@ Value getreceivedbyaddress(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() < 1 || params.size() > 2)
         throw runtime_error(
-            "getreceivedbyaddress \"litecoinaddress\" ( minconf )\n"
-            "\nReturns the total amount received by the given litecoinaddress in transactions with at least minconf confirmations.\n"
+            "getreceivedbyaddress \"DIGIaddress\" ( minconf )\n"
+            "\nReturns the total amount received by the given DIGIaddress in transactions with at least minconf confirmations.\n"
             "\nArguments:\n"
-            "1. \"litecoinaddress\"  (string, required) The litecoin address for transactions.\n"
+            "1. \"litecoinaddress\"  (string, required) The DIGI address for transactions.\n"
             "2. minconf             (numeric, optional, default=1) Only include transactions confirmed at least this many times.\n"
             "\nResult:\n"
             "amount   (numeric) The total amount in ltc received at this address.\n"
-            "\nExamples:\n"
-            "\nThe amount from transactions with at least 1 confirmation\n"
-            + HelpExampleCli("getreceivedbyaddress", "\"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\"") +
-            "\nThe amount including unconfirmed transactions, zero confirmations\n"
-            + HelpExampleCli("getreceivedbyaddress", "\"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\" 0") +
-            "\nThe amount with at least 6 confirmation, very safe\n"
-            + HelpExampleCli("getreceivedbyaddress", "\"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\" 6") +
-            "\nAs a json rpc call\n"
-            + HelpExampleRpc("getreceivedbyaddress", "\"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\", 6")
+//            "\nExamples:\n"
+//            "\nThe amount from transactions with at least 1 confirmation\n"
+//            + HelpExampleCli("getreceivedbyaddress", "\"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\"") +
+//            "\nThe amount including unconfirmed transactions, zero confirmations\n"
+//            + HelpExampleCli("getreceivedbyaddress", "\"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\" 0") +
+//            "\nThe amount with at least 6 confirmation, very safe\n"
+//            + HelpExampleCli("getreceivedbyaddress", "\"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\" 6") +
+//            "\nAs a json rpc call\n"
+//            + HelpExampleRpc("getreceivedbyaddress", "\"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\", 6")
        );
 
     // Bitcoin address
     CBitcoinAddress address = CBitcoinAddress(params[0].get_str());
     if (!address.IsValid())
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Litecoin address");
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid DIGI address");
     CScript scriptPubKey = GetScriptForDestination(address.Get());
     if (!IsMine(*pwalletMain,scriptPubKey))
         return (double)0.0;
@@ -776,7 +777,7 @@ Value sendfrom(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() < 3 || params.size() > 6)
         throw runtime_error(
-            "sendfrom \"fromaccount\" \"tolitecoinaddress\" amount ( minconf \"comment\" \"comment-to\" )\n"
+            "sendfrom \"fromaccount\" \"toDIGIaddress\" amount ( minconf \"comment\" \"comment-to\" )\n"
             "\nSent an amount from an account to a litecoin address.\n"
             "The amount is a real and is rounded to the nearest 0.00000001."
             + HelpRequiringPassphrase() + "\n"
@@ -792,19 +793,19 @@ Value sendfrom(const Array& params, bool fHelp)
             "                                     it is just kept in your wallet.\n"
             "\nResult:\n"
             "\"transactionid\"        (string) The transaction id.\n"
-            "\nExamples:\n"
-            "\nSend 0.01 ltc from the default account to the address, must have at least 1 confirmation\n"
-            + HelpExampleCli("sendfrom", "\"\" \"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\" 0.01") +
-            "\nSend 0.01 from the tabby account to the given address, funds must have at least 6 confirmations\n"
-            + HelpExampleCli("sendfrom", "\"tabby\" \"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\" 0.01 6 \"donation\" \"seans outpost\"") +
-            "\nAs a json rpc call\n"
-            + HelpExampleRpc("sendfrom", "\"tabby\", \"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\", 0.01, 6, \"donation\", \"seans outpost\"")
+//            "\nExamples:\n"
+//            "\nSend 0.01 ltc from the default account to the address, must have at least 1 confirmation\n"
+//            + HelpExampleCli("sendfrom", "\"\" \"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\" 0.01") +
+//            "\nSend 0.01 from the tabby account to the given address, funds must have at least 6 confirmations\n"
+//            + HelpExampleCli("sendfrom", "\"tabby\" \"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\" 0.01 6 \"donation\" \"seans outpost\"") +
+//            "\nAs a json rpc call\n"
+//            + HelpExampleRpc("sendfrom", "\"tabby\", \"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\", 0.01, 6, \"donation\", \"seans outpost\"")
         );
 
     string strAccount = AccountFromValue(params[0]);
     CBitcoinAddress address(params[1].get_str());
     if (!address.IsValid())
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Litecoin address");
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid DIGI address");
     CAmount nAmount = AmountFromValue(params[2]);
     int nMinDepth = 1;
     if (params.size() > 3)
@@ -877,7 +878,7 @@ Value sendmany(const Array& params, bool fHelp)
     {
         CBitcoinAddress address(s.name_);
         if (!address.IsValid())
-            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, string("Invalid Litecoin address: ")+s.name_);
+            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, string("Invalid DIGI address: ")+s.name_);
 
         if (setAddress.count(address))
             throw JSONRPCError(RPC_INVALID_PARAMETER, string("Invalid parameter, duplicated address: ")+s.name_);
@@ -919,7 +920,7 @@ Value addmultisigaddress(const Array& params, bool fHelp)
     {
         string msg = "addmultisigaddress nrequired [\"key\",...] ( \"account\" )\n"
             "\nAdd a nrequired-to-sign multisignature address to the wallet.\n"
-            "Each key is a Litecoin address or hex-encoded public key.\n"
+            "Each key is a DIGI address or hex-encoded public key.\n"
             "If 'account' is specified, assign address to that account.\n"
 
             "\nArguments:\n"
@@ -934,11 +935,11 @@ Value addmultisigaddress(const Array& params, bool fHelp)
             "\nResult:\n"
             "\"litecoinaddress\"  (string) A litecoin address associated with the keys.\n"
 
-            "\nExamples:\n"
-            "\nAdd a multisig address from 2 addresses\n"
-            + HelpExampleCli("addmultisigaddress", "2 \"[\\\"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\\\",\\\"LbhhnRHHVfP1eUJp1tDNiyeeVsNhFN9Fcw\\\"]\"") +
-            "\nAs json rpc call\n"
-            + HelpExampleRpc("addmultisigaddress", "2, \"[\\\"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\\\",\\\"LbhhnRHHVfP1eUJp1tDNiyeeVsNhFN9Fcw\\\"]\"")
+//            "\nExamples:\n"
+//            "\nAdd a multisig address from 2 addresses\n"
+//            + HelpExampleCli("addmultisigaddress", "2 \"[\\\"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\\\",\\\"LbhhnRHHVfP1eUJp1tDNiyeeVsNhFN9Fcw\\\"]\"") +
+//            "\nAs json rpc call\n"
+//            + HelpExampleRpc("addmultisigaddress", "2, \"[\\\"Ler4HNAEfwYhBmGXcFP2Po1NpRUEiK8km2\\\",\\\"LbhhnRHHVfP1eUJp1tDNiyeeVsNhFN9Fcw\\\"]\"")
         ;
         throw runtime_error(msg);
     }
@@ -955,7 +956,6 @@ Value addmultisigaddress(const Array& params, bool fHelp)
     pwalletMain->SetAddressBook(innerID, strAccount, "send");
     return CBitcoinAddress(innerID).ToString();
 }
-
 
 struct tallyitem
 {
@@ -1831,7 +1831,7 @@ Value encryptwallet(const Array& params, bool fHelp)
     // slack space in .dat files; that is bad if the old data is
     // unencrypted private keys. So:
     StartShutdown();
-    return "wallet encrypted; Litecoin server stopping, restart to run with encrypted wallet. The keypool has been flushed, you need to make a new backup.";
+    return "wallet encrypted; DIGI server stopping, restart to run with encrypted wallet. The keypool has been flushed, you need to make a new backup.";
 }
 
 Value lockunspent(const Array& params, bool fHelp)

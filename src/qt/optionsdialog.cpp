@@ -239,14 +239,24 @@ void OptionsDialog::showRestartWarning(bool fPersistent)
 
     if(fPersistent)
     {
+//<<<<<<< HEAD
         ui->statusLabel->setText(tr("Client restart required to activate changes."));
+//=======
+//        QMessageBox::warning(this, tr("Warning"), tr("This setting will take effect after restarting DIGI."), QMessageBox::Ok);
+//        fRestartWarningDisplayed_Proxy = true;
+//>>>>>>> e30de9e... a
     }
     else
     {
+//<<<<<<< HEAD
         ui->statusLabel->setText(tr("This change would require a client restart."));
         // clear non-persistent status label after 10 seconds
         // Todo: should perhaps be a class attribute, if we extend the use of statusLabel
         QTimer::singleShot(10000, this, SLOT(clearStatusLabel()));
+//=======
+//        QMessageBox::warning(this, tr("Warning"), tr("This setting will take effect after restarting DIGI."), QMessageBox::Ok);
+//        fRestartWarningDisplayed_Lang = true;
+//>>>>>>> e30de9e... a
     }
 }
 

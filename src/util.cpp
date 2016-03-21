@@ -360,7 +360,7 @@ static std::string FormatException(std::exception* pex, const char* pszThread)
     char pszModule[MAX_PATH] = "";
     GetModuleFileNameA(NULL, pszModule, sizeof(pszModule));
 #else
-    const char* pszModule = "litecoin";
+    const char* pszModule = "DIGI";
 #endif
     if (pex)
         return strprintf(
@@ -387,7 +387,7 @@ boost::filesystem::path GetDefaultDataDir()
     // Unix: ~/.litecoin
 #ifdef WIN32
     // Windows
-    return GetSpecialFolderPath(CSIDL_APPDATA) / "Litecoin";
+    return GetSpecialFolderPath(CSIDL_APPDATA) / "DIGI";
 #else
     fs::path pathRet;
     char* pszHome = getenv("HOME");
@@ -398,11 +398,16 @@ boost::filesystem::path GetDefaultDataDir()
 #ifdef MAC_OSX
     // Mac
     pathRet /= "Library/Application Support";
+//<<<<<<< HEAD
     TryCreateDirectory(pathRet);
-    return pathRet / "Litecoin";
+    return pathRet / "DIGI";
+//=======
+//    fs::create_directory(pathRet);
+//    return pathRet / "DIGI";
+//>>>>>>> e30de9e... a
 #else
     // Unix
-    return pathRet / ".litecoin";
+    return pathRet / ".DIGI";
 #endif
 #endif
 }
@@ -449,10 +454,9 @@ void ClearDatadirCache()
 
 boost::filesystem::path GetConfigFile()
 {
-    boost::filesystem::path pathConfigFile(GetArg("-conf", "litecoin.conf"));
+    boost::filesystem::path pathConfigFile(GetArg("-conf", "DIGI.conf"));
     if (!pathConfigFile.is_complete())
         pathConfigFile = GetDataDir(false) / pathConfigFile;
-
     return pathConfigFile;
 }
 
@@ -485,7 +489,7 @@ void ReadConfigFile(map<string, string>& mapSettingsRet,
 #ifndef WIN32
 boost::filesystem::path GetPidFile()
 {
-    boost::filesystem::path pathPidFile(GetArg("-pid", "litecoind.pid"));
+    boost::filesystem::path pathPidFile(GetArg("-pid", "DIGId.pid"));
     if (!pathPidFile.is_complete()) pathPidFile = GetDataDir() / pathPidFile;
     return pathPidFile;
 }

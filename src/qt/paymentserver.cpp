@@ -50,7 +50,8 @@ using namespace boost;
 using namespace std;
 
 const int BITCOIN_IPC_CONNECT_TIMEOUT = 1000; // milliseconds
-const QString BITCOIN_IPC_PREFIX("litecoin:");
+//<<<<<<< HEAD
+const QString BITCOIN_IPC_PREFIX("DIGI:");
 // BIP70 payment protocol messages
 const char* BIP70_MESSAGE_PAYMENTACK = "PaymentACK";
 const char* BIP70_MESSAGE_PAYMENTREQUEST = "PaymentRequest";
@@ -70,6 +71,9 @@ void PaymentServer::freeCertStore()
         PaymentServer::certStore = NULL;
     }
 }
+//=======
+//const QString BITCOIN_IPC_PREFIX("DIGI:");
+//>>>>>>> e30de9e... a
 
 //
 // Create a name that is unique for:
@@ -312,10 +316,11 @@ PaymentServer::PaymentServer(QObject* parent, bool startLocalServer) :
     {
         uriServer = new QLocalServer(this);
 
+//<<<<<<< HEAD
         if (!uriServer->listen(name)) {
             // constructor is called early in init, so don't use "emit message()" here
             QMessageBox::critical(0, tr("Payment request error"),
-                tr("Cannot start litecoin: click-to-pay handler"));
+                tr("Cannot start DIGI: click-to-pay handler"));
         }
         else {
             connect(uriServer, SIGNAL(newConnection()), this, SLOT(handleURIConnection()));
@@ -327,6 +332,12 @@ PaymentServer::PaymentServer(QObject* parent, bool startLocalServer) :
 PaymentServer::~PaymentServer()
 {
     google::protobuf::ShutdownProtobufLibrary();
+//=======
+//    if (!uriServer->listen(name))
+//        qDebug() << tr("Cannot start DIGI: click-to-pay handler");
+//    else
+//        connect(uriServer, SIGNAL(newConnection()), this, SLOT(handleURIConnection()));
+//>>>>>>> e30de9e... a
 }
 
 //

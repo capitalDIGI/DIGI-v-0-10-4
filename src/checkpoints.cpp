@@ -8,6 +8,7 @@
 #include "main.h"
 #include "uint256.h"
 
+//<<<<<<< HEAD
 #include <stdint.h>
 
 #include <boost/foreach.hpp>

@@ -31,7 +31,7 @@ using namespace boost;
 using namespace std;
 
 #if defined(NDEBUG)
-# error "Litecoin cannot be compiled without assertions."
+# error "DIGI cannot be compiled without assertions."
 #endif
 
 /**
@@ -73,7 +73,7 @@ static void CheckBlockIndex();
 /** Constant stuff for coinbase transactions we create: */
 CScript COINBASE_FLAGS;
 
-const string strMessageMagic = "Litecoin Signed Message:\n";
+const string strMessageMagic = "DIGI Signed Message:\n";
 
 // Internal stuff
 namespace {
@@ -629,12 +629,6 @@ unsigned int LimitOrphanTxSize(unsigned int nMaxOrphans)
     return nEvicted;
 }
 
-
-
-
-
-
-
 bool IsStandardTx(const CTransaction& tx, string& reason)
 {
     AssertLockHeld(cs_main);
@@ -933,7 +927,6 @@ CAmount GetMinRelayFee(const CTransaction& tx, unsigned int nBytes, bool fAllowF
         if (nBytes < (DEFAULT_BLOCK_PRIORITY_SIZE - 5000))
             nMinFee = 0;
     }
-
     if (!MoneyRange(nMinFee))
         nMinFee = MAX_MONEY;
     return nMinFee;
@@ -1242,15 +1235,13 @@ bool ReadBlockFromDisk(CBlock& block, const CBlockIndex* pindex)
 
 CAmount GetBlockValue(int nHeight, const CAmount& nFees)
 {
-    CAmount nSubsidy = 50 * COIN;
-    int halvings = nHeight / Params().SubsidyHalvingInterval();
-
-    // Force block reward to zero when right shift is undefined.
-    if (halvings >= 64)
-        return nFees;
-
-    // Subsidy is cut in half every 210,000 blocks which will occur approximately every 4 years.
-    nSubsidy >>= halvings;
+    CAmount nSubsidy = 15 * COIN;
+	if (nHeight <= 10) {
+		nSubsidy = 13800000 * COIN;
+	}
+	else {
+		nSubsidy = 15 * COIN;
+	}
 
     return nSubsidy + nFees;
 }
@@ -2470,6 +2461,7 @@ bool CheckBlock(const CBlock& block, CValidationState& state, bool fCheckPOW, bo
     if (!CheckBlockHeader(block, state, fCheckPOW))
         return false;
 
+//<<<<<<< HEAD
     // Check the merkle root.
     if (fCheckMerkleRoot) {
         bool mutated;
@@ -3505,7 +3497,6 @@ bool static AlreadyHave(const CInv& inv)
     // Don't know what it is, just say we already got one
     return true;
 }
-
 
 void static ProcessGetData(CNode* pfrom)
 {
@@ -4812,6 +4803,7 @@ bool SendMessages(CNode* pto, bool fSendTrickle)
 }
 
 
+//<<<<<<< HEAD
 bool CBlockUndo::WriteToDisk(CDiskBlockPos &pos, const uint256 &hashBlock)
 {
     // Open history file to append
@@ -4835,7 +4827,6 @@ bool CBlockUndo::WriteToDisk(CDiskBlockPos &pos, const uint256 &hashBlock)
     hasher << hashBlock;
     hasher << *this;
     fileout << hasher.GetHash();
-
     return true;
 }
 
@@ -4862,7 +4853,6 @@ bool CBlockUndo::ReadFromDisk(const CDiskBlockPos &pos, const uint256 &hashBlock
     hasher << *this;
     if (hashChecksum != hasher.GetHash())
         return error("CBlockUndo::ReadFromDisk : Checksum mismatch");
-
     return true;
 }
 
