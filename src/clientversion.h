@@ -18,7 +18,7 @@
 #define CLIENT_VERSION_MINOR 10
 #define CLIENT_VERSION_REVISION 4
 #define CLIENT_VERSION_BUILD 0
-#define COPYRIGHT_YEAR 2015
+//#define COPYRIGHT_YEAR 2015
 
 //! Set to true for release, false for prerelease or test build
 #define CLIENT_VERSION_IS_RELEASE true
@@ -39,7 +39,7 @@
 #define DO_STRINGIZE(X) #X
 
 //! Copyright string used in Windows .rc files
-#define COPYRIGHT_STR "2009-" STRINGIZE(COPYRIGHT_YEAR) " The Bitcoin Core Developers"
+#define COPYRIGHT_STR "2009-" STRINGIZE(COPYRIGHT_YEAR) " The Bitcoin Core Developers 2011 - " STRINGIZE(COPYRIGHT_YEAR) " Litecoin Core Developers 2011 - " STRINGIZE(COPYRIGHT_YEAR) " DIGI Developers"
 
 /**
  * bitcoind-res.rc includes this file, but it cannot cope with real c++ code.
