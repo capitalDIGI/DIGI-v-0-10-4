@@ -2293,6 +2293,10 @@ Adres: %4
         <translation>Deweloperzy Bitcoin Core</translation>
     </message>
     <message>
+        <source>The DIGI developers</source>
+        <translation>Deweloperzy DIGI</translation>
+    </message>
+    <message>
         <source>[testnet]</source>
         <translation>[testnet]</translation>
     </message>
