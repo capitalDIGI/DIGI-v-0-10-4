@@ -198,7 +198,7 @@ bool parseBitcoinURI(QString uri, SendCoinsRecipient *out)
 
 QString formatBitcoinURI(const SendCoinsRecipient &info)
 {
-//    QString ret = QString("litecoin:%1").arg(info.address);
+//    QString ret = QString("DIGI:%1").arg(info.address);
     QString ret = QString("DIGI:%1").arg(info.address);
     int paramCount = 0;
 
