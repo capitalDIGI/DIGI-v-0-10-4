@@ -6,7 +6,6 @@
 #include "primitives/block.h"
 
 #include "hash.h"
-#include "crypto/scrypt.h"
 #include "tinyformat.h"
 #include "utilstrencodings.h"
 
@@ -15,11 +14,31 @@ uint256 CBlockHeader::GetHash() const
     return Hash(BEGIN(nVersion), END(nNonce));
 }
 
-uint256 CBlockHeader::GetPoWHash() const
+uint256 CBlockHeader::GetPoWHash(int algo) const
 {
-    uint256 thash;
-    scrypt_1024_1_1_256(BEGIN(nVersion), BEGIN(thash));
-    return thash;
+    switch (algo)
+    {
+        case ALGO_SHA256D:
+            return GetHash();
+        case ALGO_SCRYPT:
+        {
+            uint256 thash;
+            // Caution: scrypt_1024_1_1_256 assumes fixed length of 80 bytes
+            scrypt_1024_1_1_256(BEGIN(nVersion), BEGIN(thash));
+            return thash;
+        }
+        case ALGO_GROESTL:
+            return HashGroestl(BEGIN(nVersion), END(nNonce));
+        case ALGO_SKEIN:
+            return HashSkein(BEGIN(nVersion), END(nNonce));
+        case ALGO_QUBIT:
+            return HashQubit(BEGIN(nVersion), END(nNonce));
+    }
+    return GetHash();
+
+//	uint256 thash;
+ //   scrypt_1024_1_1_256(BEGIN(nVersion), BEGIN(thash));
+ //   return thash;
 }
 
 uint256 CBlock::BuildMerkleTree(bool* fMutated) const

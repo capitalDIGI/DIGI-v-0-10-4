@@ -9,6 +9,67 @@
 #include "primitives/transaction.h"
 #include "serialize.h"
 #include "uint256.h"
+#include "crypto/scrypt.h"
+#include "crypto/hashgroestl.h"
+#include "crypto/hashskein.h"
+#include "crypto/hashqubit.h"
+
+enum {
+    ALGO_SHA256D = 0,
+    ALGO_SCRYPT  = 1,
+    ALGO_GROESTL = 2,
+    ALGO_SKEIN   = 3,
+    ALGO_QUBIT   = 4,
+    NUM_ALGOS };
+
+enum
+{
+    //Primary version
+    BLOCK_VERSION_DEFAULT        = 4,
+
+    //Algo
+    BLOCK_VERSION_ALGO           = (7 << 9),
+    BLOCK_VERSION_SHA256D        = (1 << 9),
+    BLOCK_VERSION_GROESTL        = (2 << 9),
+    BLOCK_VERSION_SKEIN          = (3 << 9),
+    BLOCK_VERSION_QUBIT          = (4 << 9),
+};
+
+inline int GetAlgo(int nVersion)
+{
+    switch (nVersion & BLOCK_VERSION_ALGO)
+    {
+        case 1:
+            return ALGO_SCRYPT;
+        case BLOCK_VERSION_SHA256D:
+            return ALGO_SHA256D;
+        case BLOCK_VERSION_GROESTL:
+            return ALGO_GROESTL;
+        case BLOCK_VERSION_SKEIN:
+            return ALGO_SKEIN;
+        case BLOCK_VERSION_QUBIT:
+            return ALGO_QUBIT;
+    }
+    return ALGO_SCRYPT;
+}
+
+inline std::string GetAlgoName(int Algo)
+{
+    switch (Algo)
+    {
+        case ALGO_SHA256D:
+            return std::string("sha256d");
+        case ALGO_SCRYPT:
+            return std::string("scrypt");
+        case ALGO_GROESTL:
+            return std::string("groestl");
+        case ALGO_SKEIN:
+            return std::string("skein");
+        case ALGO_QUBIT:
+            return std::string("qubit");
+    }
+    return std::string("unknown");
+}
 
 /** The maximum allowed size for a serialized block, in bytes (network rule) */
 static const unsigned int MAX_BLOCK_SIZE = 1000000;
@@ -36,6 +97,8 @@ public:
     {
         SetNull();
     }
+
+    int GetAlgo() const { return ::GetAlgo(nVersion); }
 
     ADD_SERIALIZE_METHODS;
 
@@ -67,7 +130,7 @@ public:
 
     uint256 GetHash() const;
 
-    uint256 GetPoWHash() const;
+    uint256 GetPoWHash(int algo) const;
 
     int64_t GetBlockTime() const
     {
