@@ -18,7 +18,7 @@ $(LIBLEVELDB) $(LIBMEMENV):
 endif
 
 BITCOIN_CONFIG_INCLUDES=-I$(builddir)/config
-BITCOIN_INCLUDES=-I$(builddir) -I$(builddir)/obj $(BOOST_CPPFLAGS) $(LEVELDB_CPPFLAGS) $(CRYPTO_CFLAGS) $(SSL_CFLAGS)
+BITCOIN_INCLUDES=-I$(builddir) -I$(builddir)/obj $(BOOST_CPPFLAGS) $(LEVELDB_CPPFLAGS) $(CRYPTO_CFLAGS) $(SSL_CFLAGS) --std=c++11 -DBOOST_NO_CXX11_SCOPED_ENUMS
 
 BITCOIN_INCLUDES += -I$(srcdir)/secp256k1/include
 
@@ -203,6 +203,7 @@ libbitcoin_wallet_a_SOURCES = \
 
 # crypto primitives library
 crypto_libbitcoin_crypto_a_CPPFLAGS = $(BITCOIN_CONFIG_INCLUDES)
+crypto_libbitcoin_crypto_a_CFLAGS = $(BITCOIN_CONFIG_INCLUDES) -fPIC
 crypto_libbitcoin_crypto_a_SOURCES = \
   crypto/sha1.cpp \
   crypto/sha256.cpp \
@@ -212,6 +213,29 @@ crypto_libbitcoin_crypto_a_SOURCES = \
   crypto/hmac_sha512.cpp \
   crypto/scrypt.cpp \
   crypto/ripemd160.cpp \
+  crypto/groestl.c \
+  crypto/sph_groestl.h \
+  crypto/blake.c \
+  crypto/sph_blake.h \
+  crypto/bmw.c \
+  crypto/sph_bmw.h \
+  crypto/cubehash.c \
+  crypto/sph_cubehash.h \
+  crypto/echo.c \
+  crypto/sph_echo.h \
+  crypto/jh.c \
+  crypto/sph_jh.h \
+  crypto/keccak.c \
+  crypto/sph_keccak.h \
+  crypto/luffa.c \
+  crypto/sph_luffa.h \
+  crypto/shavite.c \
+  crypto/sph_shavite.h \
+  crypto/simd.c \
+  crypto/sph_simd.h \
+  crypto/skein.c \
+  crypto/sph_skein.h \
+  crypto/sph_types.h \
   crypto/common.h \
   crypto/sha256.h \
   crypto/sha512.h \
