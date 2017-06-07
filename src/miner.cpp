@@ -86,10 +86,10 @@ void UpdateTime(CBlockHeader* pblock, const CBlockIndex* pindexPrev)
 
     // Updating time can change work required on testnet:
     if (Params().AllowMinDifficultyBlocks())
-        pblock->nBits = GetNextWorkRequired(pindexPrev, pblock);
+        pblock->nBits = GetNextWorkRequired(pindexPrev, pblock,pblock->GetAlgo());
 }
 
-CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn)
+CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn,int algo)
 {
     // Create new block
     auto_ptr<CBlockTemplate> pblocktemplate(new CBlockTemplate());
@@ -101,6 +101,34 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn)
     // -blockversion=N to test forking scenarios
     if (Params().MineBlocksOnDemand())
         pblock->nVersion = GetArg("-blockversion", pblock->nVersion);
+
+    CBlockIndex* pindexPrev = chainActive.Tip();
+
+    switch (algo)
+     {
+       case ALGO_SCRYPT:
+       break;
+       case ALGO_SHA256D:
+       pblock->nVersion |= BLOCK_VERSION_SHA256D;
+       break;
+       case ALGO_GROESTL:
+       pblock->nVersion |= BLOCK_VERSION_GROESTL;
+       break;
+       case ALGO_SKEIN:
+       pblock->nVersion |= BLOCK_VERSION_SKEIN;
+       break;
+       case ALGO_QUBIT:
+       pblock->nVersion |= BLOCK_VERSION_QUBIT;
+       break;
+       default:
+       error("CreateNewBlock: bad algo");
+       return NULL;
+     }
+
+     if (!TestNet() && pindexPrev->nHeight < multiAlgoDiffChangeTarget && algo != ALGO_SCRYPT) {
+       error("MultiAlgo is not yet active. Current block height %d, height multialgo becomes active %d", pindexPrev->nHeight, multiAlgoDiffChangeTarget);
+       return NULL;
+     }
 
     // Create coinbase tx
     CMutableTransaction txNew;
@@ -329,7 +357,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn)
         // Fill in header
         pblock->hashPrevBlock  = pindexPrev->GetBlockHash();
         UpdateTime(pblock, pindexPrev);
-        pblock->nBits          = GetNextWorkRequired(pindexPrev, pblock);
+        pblock->nBits          = GetNextWorkRequired(pindexPrev, pblock,pblock->GetAlgo());
         pblock->nNonce         = 0;
         pblocktemplate->vTxSigOps[0] = GetLegacySigOpCount(pblock->vtx[0]);
 
@@ -368,14 +396,14 @@ void IncrementExtraNonce(CBlock* pblock, CBlockIndex* pindexPrev, unsigned int& 
 double dHashesPerSec = 0.0;
 int64_t nHPSTimerStart = 0;
 
-CBlockTemplate* CreateNewBlockWithKey(CReserveKey& reservekey)
+CBlockTemplate* CreateNewBlockWithKey(CReserveKey& reservekey,int algo)
 {
     CPubKey pubkey;
     if (!reservekey.GetReservedKey(pubkey))
         return NULL;
 
     CScript scriptPubKey = CScript() << ToByteVector(pubkey) << OP_CHECKSIG;
-    return CreateNewBlock(scriptPubKey);
+    return CreateNewBlock(scriptPubKey,algo);
 }
 
 bool ProcessBlockFound(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
@@ -440,7 +468,7 @@ void static BitcoinMiner(CWallet *pwallet)
             unsigned int nTransactionsUpdatedLast = mempool.GetTransactionsUpdated();
             CBlockIndex* pindexPrev = chainActive.Tip();
 
-            auto_ptr<CBlockTemplate> pblocktemplate(CreateNewBlockWithKey(reservekey));
+            auto_ptr<CBlockTemplate> pblocktemplate(CreateNewBlockWithKey(reservekey, ALGO_SHA256D));
             if (!pblocktemplate.get())
             {
                 LogPrintf("Error in DIGIMiner: Keypool ran out, please call keypoolrefill before restarting the mining thread\n");

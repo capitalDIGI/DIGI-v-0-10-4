@@ -113,7 +113,13 @@ public:
         pchMessageStart[3] = 0xdb;
         vAlertPubKey = ParseHex("040184710fa689ad5023690c80f3a49c8f13f8d45b8c857fbcbc8bc4a8e4d3eb4b10f4d4604fa08dce601aaf0f470216fe1b51850b4acf21b179c45070ac7b03a9");
         nDefaultPort = 8138;
-        bnProofOfWorkLimit = ~uint256(0) >> 20;
+//        bnProofOfWorkLimit = ~uint256(0) >> 20;
+        bnProofOfWorkLimit[ALGO_SHA256D] = CBigNum(~uint256(0) >> 20); // 1.00000000
+        bnProofOfWorkLimit[ALGO_SCRYPT]  = CBigNum(~uint256(0) >> 20);
+        bnProofOfWorkLimit[ALGO_GROESTL] = CBigNum(~uint256(0) >> 20); // 0.00195311
+        bnProofOfWorkLimit[ALGO_SKEIN]   = CBigNum(~uint256(0) >> 20); // 0.00195311
+        bnProofOfWorkLimit[ALGO_QUBIT]   = CBigNum(~uint256(0) >> 20); // 0.00097655
+
         nSubsidyHalvingInterval = 840000;
         nEnforceBlockUpgradeMajority = 750;
         nRejectBlockOutdatedMajority = 950;
@@ -154,12 +160,13 @@ public:
 
         vSeeds.push_back(CDNSSeedData("DIGItools.com", "37.187.110.91"));
         vSeeds.push_back(CDNSSeedData("DIGItools.com", "54.69.29.182"));
+        vSeeds.push_back(CDNSSeedData("DIGItools.com", "5.196.28.91"));
 
-        base58Prefixes[PUBKEY_ADDRESS] = list_of(30);
-        base58Prefixes[SCRIPT_ADDRESS] = list_of(5);
-        base58Prefixes[SECRET_KEY] =     list_of(176);
-        base58Prefixes[EXT_PUBLIC_KEY] = list_of(0x04)(0x88)(0xB2)(0x1E);
-        base58Prefixes[EXT_SECRET_KEY] = list_of(0x04)(0x88)(0xAD)(0xE4);
+        base58Prefixes[PUBKEY_ADDRESS] = {30};
+        base58Prefixes[SCRIPT_ADDRESS] = {5};
+        base58Prefixes[SECRET_KEY] =     {176};
+        base58Prefixes[EXT_PUBLIC_KEY] = {0x04,0x88,0xB2,0x1E};
+        base58Prefixes[EXT_SECRET_KEY] = {0x04,0x88,0xAD,0xE4};
 
         convertSeed6(vFixedSeeds, pnSeed6_main, ARRAYLEN(pnSeed6_main));
 
@@ -217,11 +224,11 @@ public:
         vSeeds.push_back(CDNSSeedData("DIGItools.com", "testnet-seed.DIGItools.com"));
         vSeeds.push_back(CDNSSeedData("wemine-testnet.com", "dnsseed.wemine-testnet.com"));
 
-        base58Prefixes[PUBKEY_ADDRESS] = list_of(111);
-        base58Prefixes[SCRIPT_ADDRESS] = list_of(196);
-        base58Prefixes[SECRET_KEY]     = list_of(239);
-        base58Prefixes[EXT_PUBLIC_KEY] = list_of(0x04)(0x35)(0x87)(0xCF);
-        base58Prefixes[EXT_SECRET_KEY] = list_of(0x04)(0x35)(0x83)(0x94);
+        base58Prefixes[PUBKEY_ADDRESS] = {111};
+        base58Prefixes[SCRIPT_ADDRESS] = {196};
+        base58Prefixes[SECRET_KEY]     = {239};
+        base58Prefixes[EXT_PUBLIC_KEY] = {0x04,0x35,0x87,0xCF};
+        base58Prefixes[EXT_SECRET_KEY] = {0x04,0x35,0x83,0x94};
 
         convertSeed6(vFixedSeeds, pnSeed6_test, ARRAYLEN(pnSeed6_test));
 
@@ -262,7 +269,11 @@ public:
         nMinerThreads = 1;
         nTargetTimespan = 3.5 * 24 * 60 * 60; // 3.5 days
         nTargetSpacing = 2.5 * 60; // 2.5 minutes
-        bnProofOfWorkLimit = ~uint256(0) >> 1;
+        bnProofOfWorkLimit[ALGO_SHA256D] = CBigNum(~uint256(0) >> 1); // 1.00000000
+        bnProofOfWorkLimit[ALGO_SCRYPT]  = CBigNum(~uint256(0) >> 1);
+        bnProofOfWorkLimit[ALGO_GROESTL] = CBigNum(~uint256(0) >> 1); // 0.00195311
+        bnProofOfWorkLimit[ALGO_SKEIN]   = CBigNum(~uint256(0) >> 1); // 0.00195311
+        bnProofOfWorkLimit[ALGO_QUBIT]   = CBigNum(~uint256(0) >> 1); // 0.00097655
         nMaxTipAge = 24 * 60 * 60;
         genesis.nTime = 1296688602;
         genesis.nBits = 0x207fffff;

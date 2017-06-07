@@ -75,6 +75,8 @@ CScript COINBASE_FLAGS;
 
 const string strMessageMagic = "DIGI Signed Message:\n";
 
+int miningAlgo = ALGO_SCRYPT;
+
 // Internal stuff
 namespace {
 
@@ -1218,7 +1220,7 @@ bool ReadBlockFromDisk(CBlock& block, const CDiskBlockPos& pos)
     }
 
     // Check the header
-    if (!CheckProofOfWork(block.GetPoWHash(), block.nBits))
+    if (!CheckProofOfWork(block.GetPoWHash(block.GetAlgo()), block.nBits,block.GetAlgo()))
         return error("ReadBlockFromDisk : Errors in block header");
 
     return true;
@@ -2440,7 +2442,7 @@ bool FindUndoPos(CValidationState &state, int nFile, CDiskBlockPos &pos, unsigne
 bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state, bool fCheckPOW)
 {
     // Check proof of work matches claimed amount
-    if (fCheckPOW && !CheckProofOfWork(block.GetPoWHash(), block.nBits))
+    if (fCheckPOW && !CheckProofOfWork(block.GetPoWHash(block.GetAlgo()), block.nBits,block.GetAlgo()))
         return state.DoS(50, error("CheckBlockHeader() : proof of work failed"),
                          REJECT_INVALID, "high-hash");
 
@@ -2525,7 +2527,7 @@ bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& sta
 
     // Check proof of work
     if ((!Params().SkipProofOfWorkCheck()) &&
-       (block.nBits != GetNextWorkRequired(pindexPrev, &block)))
+       (block.nBits != GetNextWorkRequired(pindexPrev, &block,block.GetAlgo())))
         return state.DoS(100, error("%s : incorrect proof of work", __func__),
                          REJECT_INVALID, "bad-diffbits");
 
@@ -2668,6 +2670,11 @@ bool AcceptBlockHeader(const CBlockHeader& block, CValidationState& state, CBloc
     return true;
 }
 
+bool TestNet() {
+    // Note: it's deliberate that this returns "false" for regression test mode.
+    return(Params().TestnetToBeDeprecatedFieldRPC());
+}
+
 bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, CDiskBlockPos* dbp)
 {
     AssertLockHeld(cs_main);
@@ -2692,6 +2699,11 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
     }
 
     int nHeight = pindex->nHeight;
+
+	if ( !TestNet() && nHeight < multiAlgoDiffChangeTarget && block.GetAlgo() != ALGO_SCRYPT )
+		return state.Invalid(error("AcceptBlock() : incorrect hasing algo, only scrypt accepted until block %d", multiAlgoDiffChangeTarget),
+				REJECT_INVALID, "bad-hashalgo");
+
 
     // Write block to history file
     try {

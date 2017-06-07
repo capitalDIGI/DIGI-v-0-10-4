@@ -28,6 +28,9 @@
 using namespace json_spirit;
 using namespace std;
 
+extern int miningAlgo;
+
+
 /**
  * Return average network hashes per second based on the last 'lookup' blocks,
  * or from the last difficulty change if 'lookup' is nonpositive.
@@ -170,7 +173,7 @@ Value setgenerate(const Array& params, bool fHelp)
         Array blockHashes;
         while (nHeight < nHeightEnd)
         {
-            auto_ptr<CBlockTemplate> pblocktemplate(CreateNewBlockWithKey(reservekey));
+            auto_ptr<CBlockTemplate> pblocktemplate(CreateNewBlockWithKey(reservekey,miningAlgo));
             if (!pblocktemplate.get())
                 throw JSONRPCError(RPC_INTERNAL_ERROR, "Wallet keypool empty");
             CBlock *pblock = &pblocktemplate->block;
@@ -178,7 +181,7 @@ Value setgenerate(const Array& params, bool fHelp)
                 LOCK(cs_main);
                 IncrementExtraNonce(pblock, chainActive.Tip(), nExtraNonce);
             }
-            while (!CheckProofOfWork(pblock->GetPoWHash(), pblock->nBits)) {
+            while (!CheckProofOfWork(pblock->GetPoWHash(pblock->GetAlgo()), pblock->nBits,pblock->GetAlgo())) {
                 // Yes, there is a chance every nonce could fail to satisfy the -regtest
                 // target -- 1 in 2^(2^32). That ain't gonna happen.
                 ++pblock->nNonce;
@@ -251,7 +254,12 @@ Value getmininginfo(const Array& params, bool fHelp)
     obj.push_back(Pair("blocks",           (int)chainActive.Height()));
     obj.push_back(Pair("currentblocksize", (uint64_t)nLastBlockSize));
     obj.push_back(Pair("currentblocktx",   (uint64_t)nLastBlockTx));
-    obj.push_back(Pair("difficulty",       (double)GetDifficulty()));
+    obj.push_back(Pair("difficulty",       (double)GetDifficulty(NULL,miningAlgo)));
+    obj.push_back(Pair("difficulty_sha256d", (double)GetDifficulty(NULL, ALGO_SHA256D)));
+    obj.push_back(Pair("difficulty_scrypt",  (double)GetDifficulty(NULL, ALGO_SCRYPT)));
+    obj.push_back(Pair("difficulty_groestl", (double)GetDifficulty(NULL, ALGO_GROESTL)));
+    obj.push_back(Pair("difficulty_skein",   (double)GetDifficulty(NULL, ALGO_SKEIN)));
+    obj.push_back(Pair("difficulty_qubit",   (double)GetDifficulty(NULL, ALGO_QUBIT)));
     obj.push_back(Pair("errors",           GetWarnings("statusbar")));
     obj.push_back(Pair("genproclimit",     (int)GetArg("-genproclimit", -1)));
     obj.push_back(Pair("networkhashps",    getnetworkhashps(params, false)));
@@ -512,7 +520,7 @@ Value getblocktemplate(const Array& params, bool fHelp)
             pblocktemplate = NULL;
         }
         CScript scriptDummy = CScript() << OP_TRUE;
-        pblocktemplate = CreateNewBlock(scriptDummy);
+        pblocktemplate = CreateNewBlock(scriptDummy,miningAlgo);
         if (!pblocktemplate)
             throw JSONRPCError(RPC_OUT_OF_MEMORY, "Out of memory");
 
